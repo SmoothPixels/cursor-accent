@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.smoothpixels.cursor-accent",
+  "name": "Cursor Accent",
+  "version": "1.0.0",
+  "author": "Jean Alvarado",
+  "license": "GPL-3.0-or-later",
+  "description": "Recolors the system cursor to the active Omarchy theme's accent, with a fixed-color or system-default option and a choice of pointer shape.",
+  "kinds": [
+    "service"
+  ],
+  "keepLoaded": true,
+  "entryPoints": {
+    "service": "Service.qml"
+  }
+}

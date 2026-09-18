@@ -1,0 +1,9 @@
+// Style > Cursor submenu for io.github.smoothpixels.cursor-accent. Splice
+// into ~/.config/omarchy/extensions/omarchy-menu.jsonc (see
+// tools/install-menu-entries.sh).
+  "style.cursor": {"icon":"","label":"Cursor","description":"Pick the accent-following cursor's colors and shape"},
+  "style.cursor.follow": {"icon":"","label":"Follow Theme","checked":"[[ \"$($HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent status | jq -r .mode)\" == \"theme\" ]]","action":"$HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent follow"},
+  "style.cursor.default": {"icon":"","label":"Default (System)","checked":"[[ \"$($HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent status | jq -r .mode)\" == \"off\" ]]","action":"$HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent default"},
+  "style.cursor.modern": {"icon":"","label":"Modern (rounded)","checked":"[[ \"$($HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent status | jq -r .shape)\" == \"modern\" ]]","action":"$HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent shape modern"},
+  "style.cursor.original": {"icon":"","label":"Original (sharp)","checked":"[[ \"$($HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent status | jq -r .shape)\" == \"original\" ]]","action":"$HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent shape original"},
+  "style.cursor.fixed": {"icon":"","label":"Fixed Color…","checked":"[[ \"$($HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent status | jq -r .mode)\" == \"fixed\" ]]","action":"omarchy-launch-floating-terminal-with-presentation '$HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/tools/set-fixed-color.sh'"},

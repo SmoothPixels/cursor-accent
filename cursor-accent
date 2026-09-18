@@ -1,0 +1,47 @@
+#!/bin/bash
+# Configure and reapply the accent-following cursor.
+#
+# Usage:
+#   cursor-accent follow                 # go back to following the active theme
+#   cursor-accent fixed '#rrggbb'        # stop following the theme, use one color
+#   cursor-accent default                # turn this off, use the system default cursor
+#   cursor-accent shape modern|original  # rounded (default) or classic pointed
+#   cursor-accent status                 # show current config
+set -euo pipefail
+PLUGIN_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+STATE_DIR="$HOME/.local/state/cursor-accent"
+CONFIG="$STATE_DIR/config.json"
+
+read_config() {
+  [[ -f $CONFIG ]] && cat "$CONFIG" || echo '{"mode":"theme","shape":"modern","fixed_color":"#F25623"}'
+}
+
+write_and_apply() {
+  mkdir -p "$STATE_DIR"
+  echo "$1" > "$CONFIG"
+  python3 "$PLUGIN_DIR/recolor.py" "$(omarchy-theme-current 2>/dev/null || echo unknown)"
+}
+
+case "${1:-}" in
+  follow)
+    write_and_apply "$(read_config | jq '.mode = "theme"')"
+    ;;
+  fixed)
+    [[ -n ${2:-} ]] || { echo "Usage: cursor-accent fixed '#rrggbb'" >&2; exit 1; }
+    write_and_apply "$(read_config | jq --arg c "$2" '.mode = "fixed" | .fixed_color = $c')"
+    ;;
+  default)
+    write_and_apply "$(read_config | jq '.mode = "off"')"
+    ;;
+  shape)
+    [[ ${2:-} == "modern" || ${2:-} == "original" ]] || { echo "Usage: cursor-accent shape modern|original" >&2; exit 1; }
+    write_and_apply "$(read_config | jq --arg s "$2" '.shape = $s')"
+    ;;
+  status)
+    read_config | jq .
+    ;;
+  *)
+    echo "Usage: cursor-accent follow | fixed '#rrggbb' | default | shape modern|original | status" >&2
+    exit 1
+    ;;
+esac
