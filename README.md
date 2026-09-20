@@ -17,26 +17,22 @@ entirely to use the system default cursor, and choosing between Bibata's
 omarchy plugin add https://github.com/SmoothPixels/cursor-accent.git --enable
 ```
 
-Installing the plugin alone does nothing visible yet: it only ships the
-mechanism (`recolor.py`) and a one-time startup apply. The two features that
-make it useful are both opt-in, run once yourself:
+Once enabled, the plugin's shell service applies the cursor once at startup
+and re-applies it whenever the active theme's colors.toml changes, so
+`omarchy theme set` recolors the pointer immediately — no shell restart and
+no manual setup needed. Everything below is optional:
 
 ```sh
-# Follow the active theme automatically from now on, on every `omarchy theme set`
-~/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/tools/install-cursor-hook.sh
-
 # Optional: a "Style > Cursor" menu, since there's no settings-form GUI yet
 ~/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/tools/install-menu-entries.sh
 ```
 
-The first command generates and installs a `theme-set` hook (`omarchy hook
-install theme-set ...`), a documented Omarchy extension point that runs on
-every `omarchy theme set`, and applies the current theme's colors
-immediately. It's generated rather than a static file because
-`omarchy-hook-install` copies the hook into
-`~/.config/omarchy/hooks/theme-set.d/`, not a symlink, so it needs this
-plugin's real install path baked in. Nothing else in this plugin touches
-your configuration on its own.
+An older `theme-set` hook installer (`tools/install-cursor-hook.sh`) is still
+supported for machines where the shell service isn't running (e.g. a theme
+changed from outside the session). It's no longer required: the service
+watches theme changes itself, and `recolor.py` skips a rebuild when the
+colors it was asked for are already applied, so keeping the hook installed
+alongside the service never builds the cursor twice.
 
 ## Settings
 
