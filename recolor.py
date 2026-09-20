@@ -15,8 +15,8 @@ Shape comes from config.json's "shape": "modern" (default, rounded) or
 targets in the vendored bibata_cursor's config/render.json.
 
 Usage: recolor.py [theme-name]   (theme-name is cosmetic/logging only; theme
-mode always reads whatever is currently staged, since that's what
-omarchy-theme-set has already switched to by the time its hook runs.)
+mode always reads whatever is currently staged, which omarchy-theme-set has
+already switched to by the time this runs.)
 
 Paths are resolved relative to this file, not hardcoded, so this works
 whether it's run from a git checkout or from an installed
@@ -24,6 +24,7 @@ whether it's run from a git checkout or from an installed
 lives outside that directory, in ~/.local/state, so `omarchy plugin update`
 (which re-syncs the plugin's own folder from git) never touches it.
 """
+import fcntl
 import json
 import os
 import shutil
@@ -35,6 +36,8 @@ from pathlib import Path
 PLUGIN_DIR = Path(__file__).resolve().parent
 STATE_DIR = Path.home() / ".local/state/cursor-accent"
 CONFIG_PATH = STATE_DIR / "config.json"
+LAST_APPLIED_PATH = STATE_DIR / "last-applied.json"
+LOCK_PATH = STATE_DIR / "recolor.lock"
 COLORS_PATH = Path.home() / ".local/state/omarchy/current/theme/colors.toml"
 CURSOR_NAME = "Omarchy-Accent"
 CURSOR_SIZE = os.environ.get("HYPRCURSOR_SIZE", "24")
@@ -56,6 +59,33 @@ def load_config():
     return dict(DEFAULT_CONFIG)
 
 
+def cursor_summary(mode, shape, target, body, accent, watch):
+    """What the built cursor is a function of. The short-circuit below skips a
+    full rebuild when this matches the last one, so the opt-in theme-set hook
+    and this service's watcher can both fire on a theme switch without
+    building twice."""
+    return {
+        "mode": mode,
+        "shape": shape,
+        "target": target,
+        "body": body,
+        "accent": accent,
+        "watch": watch,
+    }
+
+
+def already_applied(summary):
+    try:
+        return json.loads(LAST_APPLIED_PATH.read_text()) == summary
+    except (json.JSONDecodeError, OSError):
+        return False
+
+
+def write_last_applied(summary):
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    LAST_APPLIED_PATH.write_text(json.dumps(summary, indent=2) + "\n")
+
+
 def load_theme_colors():
     with COLORS_PATH.open("rb") as f:
         c = tomllib.load(f)
@@ -65,30 +95,7 @@ def load_theme_colors():
     return body, accent, watch
 
 
-def main():
-    theme_name = sys.argv[1] if len(sys.argv) > 1 else "(unknown)"
-    config = load_config()
-
-    if config.get("mode") == "off":
-        subprocess.run(["hyprctl", "setcursor", "default", CURSOR_SIZE], check=True)
-        print("cursor-accent: mode=off, reverted to the system default cursor")
-        return
-
-    shape = config.get("shape", "modern")
-    if shape not in SHAPE_TARGETS:
-        print(f"cursor-accent: unknown shape '{shape}', falling back to modern", file=sys.stderr)
-        shape = "modern"
-    target = SHAPE_TARGETS[shape]
-
-    if config.get("mode") == "fixed":
-        accent = config.get("fixed_color", "#F25623")
-        body = watch = "#171717"
-        print(f"cursor-accent: mode=fixed shape={shape} accent={accent}")
-    else:
-        body, accent, watch = load_theme_colors()
-        print(f"cursor-accent: mode=theme theme={theme_name} shape={shape} "
-              f"body={body} accent={accent} watch={watch}")
-
+def build_and_install(target, body, accent, watch):
     # Work in a scratch copy of config/, not the plugin's own tracked copy:
     # an `omarchy plugin update` mid-run shouldn't race a half-written
     # render.json, and the plugin directory should stay pristine anyway.
@@ -133,7 +140,64 @@ def main():
     )
     shutil.rmtree(build_dir, ignore_errors=True)
 
-    subprocess.run(["hyprctl", "setcursor", CURSOR_NAME, CURSOR_SIZE], check=True)
+
+def main():
+    theme_name = sys.argv[1] if len(sys.argv) > 1 else "(unknown)"
+    config = load_config()
+
+    if config.get("mode") == "off":
+        subprocess.run(["hyprctl", "setcursor", "default", CURSOR_SIZE], check=True)
+        print("cursor-accent: mode=off, reverted to the system default cursor")
+        return
+
+    shape = config.get("shape", "modern")
+    if shape not in SHAPE_TARGETS:
+        print(f"cursor-accent: unknown shape '{shape}', falling back to modern", file=sys.stderr)
+        shape = "modern"
+    target = SHAPE_TARGETS[shape]
+
+    if config.get("mode") == "fixed":
+        mode = "fixed"
+        accent = config.get("fixed_color", "#F25623")
+        body = watch = "#171717"
+        print(f"cursor-accent: mode=fixed shape={shape} accent={accent}")
+    else:
+        mode = "theme"
+        body, accent, watch = load_theme_colors()
+        print(f"cursor-accent: mode=theme theme={theme_name} shape={shape} "
+              f"body={body} accent={accent} watch={watch}")
+
+    summary = cursor_summary(mode, shape, target, body, accent, watch)
+
+    def activate():
+        # Cheap and idempotent: re-assert the active theme even when nothing
+        # was rebuilt, so a fresh login (or a shell restart re-running this
+        # service) still has the accent cursor selected.
+        subprocess.run(["hyprctl", "setcursor", CURSOR_NAME, CURSOR_SIZE], check=True)
+
+    if already_applied(summary):
+        activate()
+        print("cursor-accent: cursor already matches, nothing to rebuild")
+        return
+
+    # Build inside a lock. The opt-in theme-set hook and this service's
+    # watcher both fire on a theme switch; the lock serializes them and the
+    # check under it lets the loser skip its duplicate build. The marker is
+    # written before the lock is released so a process that was waiting on it
+    # re-checks and finds the palette already applied.
+    with open(LOCK_PATH, "w") as lockf:
+        fcntl.flock(lockf, fcntl.LOCK_EX)
+        try:
+            if already_applied(summary):
+                activate()
+                print("cursor-accent: cursor already applied by a concurrent run")
+                return
+            build_and_install(target, body, accent, watch)
+            write_last_applied(summary)
+        finally:
+            fcntl.flock(lockf, fcntl.LOCK_UN)
+
+    activate()
     print(f"cursor-accent: applied {CURSOR_NAME} ({target}) at size {CURSOR_SIZE}")
 
 
