@@ -3,10 +3,10 @@
 
 Colors come from one of three modes, read from config.json:
   "theme" (default): follow the active Omarchy theme's colors.toml
-    body   <- dark_background / background
-    accent <- accent
-    watch  <- darker_background / background
-  "fixed": always use config.json's fixed_color for the outline, ignoring
+    body    <- accent
+    outline <- black or white, whichever contrasts more with the accent
+    watch   <- darker_background / background
+  "fixed": same, but the body is config.json's fixed_color, ignoring
     whatever the active theme is.
   "off": revert to the system's own default cursor (skips the whole build).
 
@@ -30,6 +30,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 import tomllib
 from pathlib import Path
 
@@ -57,13 +58,46 @@ def load_config():
     return dict(DEFAULT_CONFIG)
 
 
+def contrast_outline(color):
+    """Black or white, whichever contrasts more with color (>= 4.5:1 always).
+
+    The body is the accent, so the outline is what keeps the pointer visible
+    over an unpredictable background such as a video: the two can never both
+    match it.
+    """
+    r, g, b = (int(color.lstrip("#")[i:i + 2], 16) / 255 for i in (0, 2, 4))
+    lin = [v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4 for v in (r, g, b)]
+    luminance = 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2]
+    # contrast with white is 1.05 / (L + 0.05), with black (L + 0.05) / 0.05
+    return "#000000" if (luminance + 0.05) / 0.05 >= 1.05 / (luminance + 0.05) else "#FFFFFF"
+
+
 def load_theme_colors():
     with COLORS_PATH.open("rb") as f:
         c = tomllib.load(f)
     accent = c.get("accent", "#F25623")
-    body = c.get("dark_background") or c.get("background") or "#171717"
-    watch = c.get("darker_background") or c.get("background") or body
-    return body, accent, watch
+    background = c.get("background", "#171717")
+    watch = c.get("darker_background") or background
+    return accent, contrast_outline(accent), watch
+
+
+def apply_cursor(cursor_name):
+    subprocess.run(["hyprctl", "setcursor", cursor_name, CURSOR_SIZE], check=True)
+    # Hyprland keeps drawing the old pointer image until the pointer is hidden
+    # and shown again (setcursor alone does not redraw it, and moving within
+    # the same window does not either). A key press hides it at once
+    # (cursor:hide_on_key_press), then re-issuing the current position shows
+    # it again, which forces the new theme to be drawn. Best effort: never
+    # fail the recolor over this.
+    try:
+        subprocess.run(["wtype", "-k", "F24"], capture_output=True)
+        time.sleep(0.05)
+        pos = subprocess.run(["hyprctl", "cursorpos"], capture_output=True,
+                             text=True, check=True).stdout.replace(",", " ").split()
+        subprocess.run(["hyprctl", "dispatch", "movecursor", pos[0], pos[1]],
+                       capture_output=True, check=True)
+    except (subprocess.CalledProcessError, IndexError, OSError):
+        pass
 
 
 def main():
@@ -82,13 +116,14 @@ def main():
     target = SHAPE_TARGETS[shape]
 
     if config.get("mode") == "fixed":
-        accent = config.get("fixed_color", "#F25623")
-        body = watch = "#171717"
-        print(f"cursor-accent: mode=fixed shape={shape} accent={accent}")
+        body = config.get("fixed_color", "#F25623")
+        outline = contrast_outline(body)
+        watch = "#171717"
+        print(f"cursor-accent: mode=fixed shape={shape} body={body} outline={outline}")
     else:
-        body, accent, watch = load_theme_colors()
+        body, outline, watch = load_theme_colors()
         print(f"cursor-accent: mode=theme theme={theme_name} shape={shape} "
-              f"body={body} accent={accent} watch={watch}")
+              f"body={body} outline={outline} watch={watch}")
 
     # Work in a scratch copy of config/, not the plugin's own tracked copy:
     # an `omarchy plugin update` mid-run shouldn't race a half-written
@@ -105,7 +140,7 @@ def main():
             shutil.copy(PLUGIN_DIR / "config/render.json", render_path)
         render = json.loads(render_path.read_text())
         render[target]["colors"][0]["replace"] = body
-        render[target]["colors"][1]["replace"] = accent
+        render[target]["colors"][1]["replace"] = outline
         render[target]["colors"][2]["replace"] = watch
         render_path.write_text(json.dumps(render, indent=2))
 
@@ -143,7 +178,7 @@ def main():
         # Runtime-only: Hyprland forgets this on restart, and with no
         # HYPRCURSOR_THEME set it boots with whichever theme directory
         # hyprcursor finds first. The post-boot hook re-runs this script.
-        subprocess.run(["hyprctl", "setcursor", CURSOR_NAME, CURSOR_SIZE], check=True)
+        apply_cursor(CURSOR_NAME)
         print(f"cursor-accent: applied {CURSOR_NAME} ({target}) at size {CURSOR_SIZE}")
 
 
