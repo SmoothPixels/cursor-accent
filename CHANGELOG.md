@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Fixed a Hyprland crash at login (abort in `CCursorBuffer` / cairo,
+  followed by a restart in safe mode). The theme is no longer rebuilt when
+  its shape and colors have not changed, and a rebuild swaps the new theme
+  in with one atomic `renameat2(RENAME_EXCHANGE)`, so Hyprland never sees
+  a missing or half-written theme folder.
+
 ## 1.1.0 (2026-09-22)
 
 - The cursor is re-applied at every login. A post-boot hook joins the

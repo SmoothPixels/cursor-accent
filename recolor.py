@@ -66,6 +66,16 @@ def load_theme_colors():
     return body, accent, watch
 
 
+def exchange_dirs(a, b):
+    """Atomically swap two paths with renameat2(RENAME_EXCHANGE)."""
+    import ctypes
+    libc = ctypes.CDLL(None, use_errno=True)
+    AT_FDCWD, RENAME_EXCHANGE = -100, 2
+    if libc.renameat2(AT_FDCWD, os.fsencode(a), AT_FDCWD, os.fsencode(b), RENAME_EXCHANGE) != 0:
+        err = ctypes.get_errno()
+        raise OSError(err, os.strerror(err), str(a))
+
+
 def main():
     theme_name = sys.argv[1] if len(sys.argv) > 1 else "(unknown)"
     config = load_config()
@@ -96,10 +106,24 @@ def main():
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     # The theme-set hook, the post-boot hook, and the shell service can all
     # fire within the same second at login. Serialize them: they share the
-    # scratch build dir and the install dir, and each run starts by wiping
-    # both. A full build is ~0.2s, so the loser just redoes the same work.
+    # scratch build dir and the install dir. The loser usually finds the
+    # theme already built with the same colors and only re-applies it.
     with (STATE_DIR / ".lock").open("w") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
+
+        # At login the post-boot hook and the shell service both run this
+        # with the same colors. Rebuilding then swaps the theme directory
+        # under a Hyprland that is still loading cursor shapes from it,
+        # which aborts Hyprland in cairo. If the installed theme already
+        # matches, only re-apply it.
+        install_dir = Path.home() / f".local/share/icons/{CURSOR_NAME}"
+        stamp = f"{target} {body} {accent} {watch}\n"
+        stamp_path = install_dir / ".cursor-accent-stamp"
+        if stamp_path.exists() and stamp_path.read_text() == stamp:
+            subprocess.run(["hyprctl", "setcursor", CURSOR_NAME, CURSOR_SIZE], check=True)
+            print(f"cursor-accent: {CURSOR_NAME} already up to date, re-applied")
+            return
+
         render_path = STATE_DIR / "render.json"
         if not render_path.exists():
             shutil.copy(PLUGIN_DIR / "config/render.json", render_path)
@@ -129,15 +153,28 @@ def main():
             cwd=build_dir, check=True,
         )
 
-        install_dir = Path.home() / f".local/share/icons/{CURSOR_NAME}"
-        shutil.rmtree(install_dir, ignore_errors=True)
-        shutil.copytree(build_dir / "out" / target, install_dir)
-        (install_dir / "index.theme").write_text(
+        # Stage the theme next to the install dir and swap it in atomically.
+        # Hyprland loads cursor shapes lazily from this directory, so deleting
+        # it and copying file by file lets the compositor read a missing or
+        # half-written .hlc, which aborts Hyprland in cairo.
+        staging_dir = install_dir.with_name(f".{CURSOR_NAME}.new")
+        shutil.rmtree(staging_dir, ignore_errors=True)
+        shutil.copytree(build_dir / "out" / target, staging_dir)
+        (staging_dir / "index.theme").write_text(
             "[Icon Theme]\n"
             f"Name={CURSOR_NAME}\n"
             "Comment=Bibata cursor recolored to the active Omarchy theme\n"
             "Inherits=Adwaita\n"
         )
+        (staging_dir / ".cursor-accent-stamp").write_text(stamp)
+        if install_dir.exists():
+            # One atomic exchange: the theme path never goes missing, not
+            # even for the instant between two plain renames. Afterwards
+            # staging_dir holds the previous theme.
+            exchange_dirs(staging_dir, install_dir)
+            shutil.rmtree(staging_dir, ignore_errors=True)
+        else:
+            staging_dir.rename(install_dir)
         shutil.rmtree(build_dir, ignore_errors=True)
 
         # Runtime-only: Hyprland forgets this on restart, and with no
