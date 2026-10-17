@@ -1,7 +1,8 @@
 #!/bin/bash
 # Opt-in: installs the hooks that keep the cursor color following the active
-# Omarchy theme automatically. Run this yourself; nothing in this plugin does
-# it on install (see README.md).
+# Omarchy theme automatically, and the Style > Cursor menu entries (via
+# install-menu-entries.sh). Run this yourself; nothing in this plugin does it
+# on install (see README.md).
 #
 # Two hooks, one generated script:
 #   theme-set   recolor on every `omarchy theme set`
@@ -36,3 +37,8 @@ omarchy hook install theme-set "$tmp"
 omarchy hook install post-boot "$tmp"
 echo "Applying the current theme's colors now..."
 "$PLUGIN_DIR/cursor-accent" follow
+
+# The menu entries live in the user's own menu file, since Omarchy has no way
+# for a plugin to contribute menu rows itself. Once they're there, Service.qml
+# keeps them in step with this plugin's snippet across updates.
+"$PLUGIN_DIR/tools/install-menu-entries.sh"
