@@ -1,0 +1,19 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<radialGradient id="gloss45" cx="108.8" cy="105.6" r="83.2" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="white" stop-opacity="0.75"/>
+<stop offset="0.45" stop-color="white" stop-opacity="0.1"/>
+<stop offset="1" stop-color="black" stop-opacity="0.25"/>
+</radialGradient>
+</defs>
+<circle cx="128" cy="128" r="72" fill="#0000FF"/>
+<path d="M128 128 Q92.93 131.01 84.08 81.45 A64 64 0 0 1 129.86 64.03 Q101.07 105.33 128 128 Z" fill="#0A84FF"/>
+<path d="M128 128 Q101.07 105.33 129.86 64.03 A64 64 0 0 1 174.55 84.08 Q124.99 92.93 128 128 Z" fill="#32D74B"/>
+<path d="M128 128 Q124.99 92.93 174.55 84.08 A64 64 0 0 1 191.97 129.86 Q150.67 101.07 128 128 Z" fill="#FFD60A"/>
+<path d="M128 128 Q150.67 101.07 191.97 129.86 A64 64 0 0 1 171.92 174.55 Q163.07 124.99 128 128 Z" fill="#FF9F0A"/>
+<path d="M128 128 Q163.07 124.99 171.92 174.55 A64 64 0 0 1 126.14 191.97 Q154.93 150.67 128 128 Z" fill="#FF453A"/>
+<path d="M128 128 Q154.93 150.67 126.14 191.97 A64 64 0 0 1 81.45 171.92 Q131.01 163.07 128 128 Z" fill="#BF5AF2"/>
+<path d="M128 128 Q131.01 163.07 81.45 171.92 A64 64 0 0 1 64.03 126.14 Q105.33 154.93 128 128 Z" fill="#5E5CE6"/>
+<path d="M128 128 Q105.33 154.93 64.03 126.14 A64 64 0 0 1 84.08 81.45 Q92.93 131.01 128 128 Z" fill="#64D2FF"/>
+<circle cx="128" cy="128" r="64" fill="url(#gloss45)"/>
+</svg>

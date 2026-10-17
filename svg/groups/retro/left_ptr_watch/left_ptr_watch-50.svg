@@ -1,0 +1,63 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<radialGradient id="gloss50" cx="168.0" cy="174.0" r="52.0" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="white" stop-opacity="0.75"/>
+<stop offset="0.45" stop-color="white" stop-opacity="0.1"/>
+<stop offset="1" stop-color="black" stop-opacity="0.25"/>
+</radialGradient>
+</defs>
+<g>
+<path d="M59.00 22.00 L68.66 22.00 L68.66 32.43 L59.00 32.43 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 31.66 L78.32 31.66 L78.32 42.09 L59.00 42.09 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 41.32 L87.98 41.32 L87.98 51.75 L59.00 51.75 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 50.98 L97.64 50.98 L97.64 61.41 L59.00 61.41 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 60.64 L107.30 60.64 L107.30 71.07 L59.00 71.07 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 70.30 L116.96 70.30 L116.96 80.73 L59.00 80.73 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 79.96 L126.62 79.96 L126.62 90.39 L59.00 90.39 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 89.62 L136.28 89.62 L136.28 100.05 L59.00 100.05 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 99.28 L145.94 99.28 L145.94 109.71 L59.00 109.71 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 108.94 L155.60 108.94 L155.60 119.37 L59.00 119.37 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 118.60 L165.26 118.60 L165.26 129.03 L59.00 129.03 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 128.26 L126.62 128.26 L126.62 138.69 L59.00 138.69 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 137.92 L87.98 137.92 L87.98 148.35 L59.00 148.35 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M97.64 137.92 L126.62 137.92 L126.62 148.35 L97.64 148.35 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 147.58 L78.32 147.58 L78.32 158.01 L59.00 158.01 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M107.30 147.58 L136.28 147.58 L136.28 158.01 L107.30 158.01 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 157.24 L68.66 157.24 L68.66 167.67 L59.00 167.67 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M107.30 157.24 L136.28 157.24 L136.28 167.67 L107.30 167.67 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M116.96 166.90 L145.94 166.90 L145.94 177.33 L116.96 177.33 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M116.96 176.56 L145.94 176.56 L145.94 186.99 L116.96 186.99 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M126.62 186.22 L136.28 186.22 L136.28 196.65 L126.62 196.65 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="miter"/>
+<path d="M59.00 22.00 L68.66 22.00 L68.66 32.43 L59.00 32.43 Z" fill="#00FF00"/>
+<path d="M59.00 31.66 L78.32 31.66 L78.32 42.09 L59.00 42.09 Z" fill="#00FF00"/>
+<path d="M59.00 41.32 L87.98 41.32 L87.98 51.75 L59.00 51.75 Z" fill="#00FF00"/>
+<path d="M59.00 50.98 L97.64 50.98 L97.64 61.41 L59.00 61.41 Z" fill="#00FF00"/>
+<path d="M59.00 60.64 L107.30 60.64 L107.30 71.07 L59.00 71.07 Z" fill="#00FF00"/>
+<path d="M59.00 70.30 L116.96 70.30 L116.96 80.73 L59.00 80.73 Z" fill="#00FF00"/>
+<path d="M59.00 79.96 L126.62 79.96 L126.62 90.39 L59.00 90.39 Z" fill="#00FF00"/>
+<path d="M59.00 89.62 L136.28 89.62 L136.28 100.05 L59.00 100.05 Z" fill="#00FF00"/>
+<path d="M59.00 99.28 L145.94 99.28 L145.94 109.71 L59.00 109.71 Z" fill="#00FF00"/>
+<path d="M59.00 108.94 L155.60 108.94 L155.60 119.37 L59.00 119.37 Z" fill="#00FF00"/>
+<path d="M59.00 118.60 L165.26 118.60 L165.26 129.03 L59.00 129.03 Z" fill="#00FF00"/>
+<path d="M59.00 128.26 L126.62 128.26 L126.62 138.69 L59.00 138.69 Z" fill="#00FF00"/>
+<path d="M59.00 137.92 L87.98 137.92 L87.98 148.35 L59.00 148.35 Z" fill="#00FF00"/>
+<path d="M97.64 137.92 L126.62 137.92 L126.62 148.35 L97.64 148.35 Z" fill="#00FF00"/>
+<path d="M59.00 147.58 L78.32 147.58 L78.32 158.01 L59.00 158.01 Z" fill="#00FF00"/>
+<path d="M107.30 147.58 L136.28 147.58 L136.28 158.01 L107.30 158.01 Z" fill="#00FF00"/>
+<path d="M59.00 157.24 L68.66 157.24 L68.66 167.67 L59.00 167.67 Z" fill="#00FF00"/>
+<path d="M107.30 157.24 L136.28 157.24 L136.28 167.67 L107.30 167.67 Z" fill="#00FF00"/>
+<path d="M116.96 166.90 L145.94 166.90 L145.94 177.33 L116.96 177.33 Z" fill="#00FF00"/>
+<path d="M116.96 176.56 L145.94 176.56 L145.94 186.99 L116.96 186.99 Z" fill="#00FF00"/>
+<path d="M126.62 186.22 L136.28 186.22 L136.28 196.65 L126.62 196.65 Z" fill="#00FF00"/>
+</g>
+<circle cx="180" cy="188" r="48" fill="#0000FF"/>
+<path d="M180 188 Q169.59 168.62 195.84 151.27 A40 40 0 0 1 217.17 173.23 Q186.35 166.94 180 188 Z" fill="#0A84FF"/>
+<path d="M180 188 Q186.35 166.94 217.17 173.23 A40 40 0 0 1 216.73 203.84 Q199.38 177.59 180 188 Z" fill="#32D74B"/>
+<path d="M180 188 Q199.38 177.59 216.73 203.84 A40 40 0 0 1 194.77 225.17 Q201.06 194.35 180 188 Z" fill="#FFD60A"/>
+<path d="M180 188 Q201.06 194.35 194.77 225.17 A40 40 0 0 1 164.16 224.73 Q190.41 207.38 180 188 Z" fill="#FF9F0A"/>
+<path d="M180 188 Q190.41 207.38 164.16 224.73 A40 40 0 0 1 142.83 202.77 Q173.65 209.06 180 188 Z" fill="#FF453A"/>
+<path d="M180 188 Q173.65 209.06 142.83 202.77 A40 40 0 0 1 143.27 172.16 Q160.62 198.41 180 188 Z" fill="#BF5AF2"/>
+<path d="M180 188 Q160.62 198.41 143.27 172.16 A40 40 0 0 1 165.23 150.83 Q158.94 181.65 180 188 Z" fill="#5E5CE6"/>
+<path d="M180 188 Q158.94 181.65 165.23 150.83 A40 40 0 0 1 195.84 151.27 Q169.59 168.62 180 188 Z" fill="#64D2FF"/>
+<circle cx="180" cy="188" r="40" fill="url(#gloss50)"/>
+</svg>
