@@ -11,12 +11,15 @@ Colors come from one of three modes, read from config.json:
   "off": revert to the system's own default cursor (skips the whole build).
 
 Shape comes from config.json's "shape": "modern" (default, rounded) or
-"original" (classic sharp-edged pointer). Both are pre-defined render
-targets in the vendored bibata_cursor's config/render.json.
+"original" (classic sharp-edged pointer), Bibata's own, or one of the styles
+drawn by tools/gen-cursor-styles.py (see SHAPE_TARGETS). Each is a render
+target in config/render.json; a style that moves hotspots ships its own
+config/build.<shape>.toml.
 
 Usage: recolor.py [theme-name]   (theme-name is cosmetic/logging only; theme
 mode always reads whatever is currently staged, since that's what
 omarchy-theme-set has already switched to by the time its hook runs.)
+       recolor.py --list-shapes   (print the valid shapes, one per line)
 
 Paths are resolved relative to this file, not hardcoded, so this works
 whether it's run from a git checkout or from an installed
@@ -43,6 +46,12 @@ CURSOR_SIZE = os.environ.get("HYPRCURSOR_SIZE", "24")
 SHAPE_TARGETS = {
     "modern": "Bibata-Modern-Classic",
     "original": "Bibata-Original-Classic",
+    "macos": "Bibata-MacOS-Classic",
+    "macos-tailless": "Bibata-MacOS-Tailless-Classic",
+    "dart": "Bibata-Dart-Classic",
+    "retro": "Bibata-Retro-Classic",
+    "crosshair": "Bibata-Crosshair-Classic",
+    "dot": "Bibata-Dot-Classic",
 }
 
 DEFAULT_CONFIG = {"mode": "theme", "shape": "modern", "fixed_color": "#F25623"}
@@ -67,6 +76,9 @@ def load_theme_colors():
 
 
 def main():
+    if sys.argv[1:2] == ["--list-shapes"]:
+        print("\n".join(SHAPE_TARGETS))
+        return
     theme_name = sys.argv[1] if len(sys.argv) > 1 else "(unknown)"
     config = load_config()
 
@@ -100,10 +112,10 @@ def main():
     # both. A full build is ~0.2s, so the loser just redoes the same work.
     with (STATE_DIR / ".lock").open("w") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
+        # Start from the plugin's copy every time: a copy cached by an older
+        # version would lack the targets of shapes added since.
         render_path = STATE_DIR / "render.json"
-        if not render_path.exists():
-            shutil.copy(PLUGIN_DIR / "config/render.json", render_path)
-        render = json.loads(render_path.read_text())
+        render = json.loads((PLUGIN_DIR / "config/render.json").read_text())
         render[target]["colors"][0]["replace"] = body
         render[target]["colors"][1]["replace"] = accent
         render[target]["colors"][2]["replace"] = watch
@@ -116,7 +128,11 @@ def main():
         (build_dir / "svg").symlink_to(PLUGIN_DIR / "svg")
         (build_dir / "config").mkdir()
         (build_dir / "config/render.json").symlink_to(render_path)
-        (build_dir / "config/build.toml").symlink_to(PLUGIN_DIR / "config/build.toml")
+        # Generated styles move hotspots, so they ship their own build toml.
+        build_toml = PLUGIN_DIR / f"config/build.{shape}.toml"
+        if not build_toml.exists():
+            build_toml = PLUGIN_DIR / "config/build.toml"
+        (build_dir / "config/build.toml").symlink_to(build_toml)
         (build_dir / "config/build.right.toml").symlink_to(PLUGIN_DIR / "config/build.right.toml")
 
         # cursor_utils.py resolves its own source paths relative to cwd, and

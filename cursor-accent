@@ -5,7 +5,10 @@
 #   cursor-accent follow                 # go back to following the active theme
 #   cursor-accent fixed '#rrggbb'        # stop following the theme, use one color
 #   cursor-accent default                # turn this off, use the system default cursor
-#   cursor-accent shape modern|original  # rounded (default) or classic pointed
+#   cursor-accent shape <shape>          # modern (default), original, macos, macos-tailless,
+#                                        #   dart, retro, crosshair, dot
+#   cursor-accent shapes                 # list the valid shapes
+#   cursor-accent settings               # open the settings window
 #   cursor-accent status                 # show current config
 set -euo pipefail
 PLUGIN_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
@@ -34,14 +37,21 @@ case "${1:-}" in
     write_and_apply "$(read_config | jq '.mode = "off"')"
     ;;
   shape)
-    [[ ${2:-} == "modern" || ${2:-} == "original" ]] || { echo "Usage: cursor-accent shape modern|original" >&2; exit 1; }
+    shapes=$(python3 "$PLUGIN_DIR/recolor.py" --list-shapes)
+    grep -qxF -- "${2:-}" <<<"$shapes" || { echo "Usage: cursor-accent shape $(paste -sd'|' <<<"$shapes")" >&2; exit 1; }
     write_and_apply "$(read_config | jq --arg s "$2" '.shape = $s')"
+    ;;
+  shapes)
+    python3 "$PLUGIN_DIR/recolor.py" --list-shapes
+    ;;
+  settings)
+    omarchy-shell shell summon io.github.smoothpixels.cursor-accent
     ;;
   status)
     read_config | jq .
     ;;
   *)
-    echo "Usage: cursor-accent follow | fixed '#rrggbb' | default | shape modern|original | status" >&2
+    echo "Usage: cursor-accent follow | fixed '#rrggbb' | default | shape <shape> | shapes | settings | status" >&2
     exit 1
     ;;
 esac

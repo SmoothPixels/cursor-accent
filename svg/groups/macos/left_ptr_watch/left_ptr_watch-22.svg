@@ -1,0 +1,23 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<radialGradient id="gloss22" cx="168.0" cy="174.0" r="52.0" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="white" stop-opacity="0.75"/>
+<stop offset="0.45" stop-color="white" stop-opacity="0.1"/>
+<stop offset="1" stop-color="black" stop-opacity="0.25"/>
+</radialGradient>
+</defs>
+<g>
+<path d="M59.00 22.00 L59.00 175.09 L95.85 141.07 L120.43 195.88 L145.94 184.54 L122.31 131.62 L167.68 130.68 Z" fill="#0000FF" stroke="#0000FF" stroke-width="16" stroke-linejoin="round"/>
+<path d="M59.00 22.00 L59.00 175.09 L95.85 141.07 L120.43 195.88 L145.94 184.54 L122.31 131.62 L167.68 130.68 Z" fill="#00FF00"/>
+</g>
+<circle cx="180" cy="188" r="48" fill="#0000FF"/>
+<path d="M180 188 Q165.40 171.54 186.95 148.61 A40 40 0 0 1 212.77 165.06 Q181.32 166.04 180 188 Z" fill="#0A84FF"/>
+<path d="M180 188 Q181.32 166.04 212.77 165.06 A40 40 0 0 1 219.39 194.95 Q196.46 173.40 180 188 Z" fill="#32D74B"/>
+<path d="M180 188 Q196.46 173.40 219.39 194.95 A40 40 0 0 1 202.94 220.77 Q201.96 189.32 180 188 Z" fill="#FFD60A"/>
+<path d="M180 188 Q201.96 189.32 202.94 220.77 A40 40 0 0 1 173.05 227.39 Q194.60 204.46 180 188 Z" fill="#FF9F0A"/>
+<path d="M180 188 Q194.60 204.46 173.05 227.39 A40 40 0 0 1 147.23 210.94 Q178.68 209.96 180 188 Z" fill="#FF453A"/>
+<path d="M180 188 Q178.68 209.96 147.23 210.94 A40 40 0 0 1 140.61 181.05 Q163.54 202.60 180 188 Z" fill="#BF5AF2"/>
+<path d="M180 188 Q163.54 202.60 140.61 181.05 A40 40 0 0 1 157.06 155.23 Q158.04 186.68 180 188 Z" fill="#5E5CE6"/>
+<path d="M180 188 Q158.04 186.68 157.06 155.23 A40 40 0 0 1 186.95 148.61 Q165.40 171.54 180 188 Z" fill="#64D2FF"/>
+<circle cx="180" cy="188" r="40" fill="url(#gloss22)"/>
+</svg>

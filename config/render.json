@@ -94,6 +94,66 @@
 		]
 	},
 
+	"Bibata-MacOS-Classic": {
+		"desc": "macos cursors (tools/gen-cursor-styles.py)",
+		"dir": "svg/macos",
+		"colors": [
+			{ "match": "#00FF00", "replace": "#000000" },
+			{ "match": "#0000FF", "replace": "#FFFFFF" },
+			{ "match": "#FF0000", "replace": "#000000" }
+		]
+	},
+
+	"Bibata-MacOS-Tailless-Classic": {
+		"desc": "macos-tailless cursors (tools/gen-cursor-styles.py)",
+		"dir": "svg/macos-tailless",
+		"colors": [
+			{ "match": "#00FF00", "replace": "#000000" },
+			{ "match": "#0000FF", "replace": "#FFFFFF" },
+			{ "match": "#FF0000", "replace": "#000000" }
+		]
+	},
+
+	"Bibata-Dart-Classic": {
+		"desc": "dart cursors (tools/gen-cursor-styles.py)",
+		"dir": "svg/dart",
+		"colors": [
+			{ "match": "#00FF00", "replace": "#000000" },
+			{ "match": "#0000FF", "replace": "#FFFFFF" },
+			{ "match": "#FF0000", "replace": "#000000" }
+		]
+	},
+
+	"Bibata-Retro-Classic": {
+		"desc": "retro cursors (tools/gen-cursor-styles.py)",
+		"dir": "svg/retro",
+		"colors": [
+			{ "match": "#00FF00", "replace": "#000000" },
+			{ "match": "#0000FF", "replace": "#FFFFFF" },
+			{ "match": "#FF0000", "replace": "#000000" }
+		]
+	},
+
+	"Bibata-Crosshair-Classic": {
+		"desc": "crosshair cursors (tools/gen-cursor-styles.py)",
+		"dir": "svg/crosshair",
+		"colors": [
+			{ "match": "#00FF00", "replace": "#000000" },
+			{ "match": "#0000FF", "replace": "#FFFFFF" },
+			{ "match": "#FF0000", "replace": "#000000" }
+		]
+	},
+
+	"Bibata-Dot-Classic": {
+		"desc": "dot cursors (tools/gen-cursor-styles.py)",
+		"dir": "svg/dot",
+		"colors": [
+			{ "match": "#00FF00", "replace": "#000000" },
+			{ "match": "#0000FF", "replace": "#FFFFFF" },
+			{ "match": "#FF0000", "replace": "#000000" }
+		]
+	},
+
 	"Bibata-Original-Ice": {
 		"desc": "sharp edge and white Bibata cursors",
 		"dir": "svg/original",

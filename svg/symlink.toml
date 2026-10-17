@@ -25,3 +25,29 @@ original-right = [
 	"groups/shared",
 	"groups/hand-right",
 ]
+
+macos = [
+	"groups/macos",
+]
+
+macos-tailless = [
+	"groups/macos-tailless",
+]
+
+dart = [
+	"groups/dart",
+]
+
+retro = [
+	"groups/retro",
+]
+
+crosshair = [
+	"groups/macos-tailless",
+	"groups/crosshair",
+]
+
+dot = [
+	"groups/macos-tailless",
+	"groups/dot",
+]
