@@ -2,7 +2,7 @@
 // into ~/.config/omarchy/extensions/omarchy-menu.jsonc (see
 // tools/install-menu-entries.sh).
   "style.cursor": {"icon":"","label":"Cursor","description":"Pick the accent-following cursor's colors and shape"},
-  "style.cursor.settings": {"icon":"","label":"Settings…","description":"Pick the color mode and pointer style with previews","action":"$HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent settings"},
+  "style.cursor.settings": {"icon":"","label":"Settings…","aliases":["cursor-settings","cursor-style","pointer"],"description":"Pick the color mode and pointer style with previews","action":"$HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent settings"},
   "style.cursor.follow": {"icon":"","label":"Follow Theme","checked":"[[ \"$($HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent status | jq -r .mode)\" == \"theme\" ]]","action":"$HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent follow"},
   "style.cursor.default": {"icon":"","label":"Default (System)","checked":"[[ \"$($HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent status | jq -r .mode)\" == \"off\" ]]","action":"$HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent default"},
   "style.cursor.modern": {"icon":"","label":"Modern (rounded)","checked":"[[ \"$($HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent status | jq -r .shape)\" == \"modern\" ]]","action":"$HOME/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent shape modern"},
