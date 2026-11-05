@@ -2,10 +2,13 @@
 
 Recolors the system pointer to match the active Omarchy theme's accent
 color, automatically, every time you switch themes. No matugen, no new
-runtime dependencies: it uses Hyprland's own `hyprcursor-util` (already
-installed, since `hyprcursor` is a hard dependency of Hyprland itself) to
-compile a [Bibata](https://github.com/ful1e5/Bibata_Cursor) cursor recolored
-on the fly from each theme's `colors.toml`.
+runtime dependencies: it uses librsvg (already installed, since
+`hyprcursor` depends on it and Hyprland depends on `hyprcursor`) through
+Omarchy's own python-gobject and python-cairo, or through `rsvg-convert`
+when those are missing, to compile a
+[Bibata](https://github.com/ful1e5/Bibata_Cursor) cursor recolored on the
+fly from each theme's `colors.toml`, as both a hyprcursor and an Xcursor
+theme.
 
 Also supports locking to one fixed color regardless of theme, turning it off
 entirely to use the system default cursor, and choosing between Bibata's
@@ -96,11 +99,32 @@ The shell watches that file, so it applies within a second or two, no restart
 needed. To remove it later, delete the `"style.cursor*"` block from that file
 by hand.
 
+## Troubleshooting
+
+**Black screen after login on Omarchy 4.5, Hyprland restarted in safe mode
+(#3).** Versions before 1.2.0 installed an SVG-only hyprcursor theme, which
+crashes Hyprland 0.56 during Omarchy 4.5's startup cursor handling, even with
+the plugin disabled. From the safe-mode session (keybinds still work, open a
+terminal), move the old theme out of the way and log in again:
+
+```sh
+mv ~/.local/share/icons/Omarchy-Accent ~/Omarchy-Accent.old
+rm -rf ~/.local/share/icons/.Omarchy-Accent.new
+```
+
+Then update the plugin and build the fixed theme, and delete
+`~/Omarchy-Accent.old`:
+
+```sh
+omarchy plugin update io.github.smoothpixels.cursor-accent
+~/.config/omarchy/plugins/io.github.smoothpixels.cursor-accent/cursor-accent follow
+```
+
 ## Remove
 
 ```sh
 rm -f ~/.config/omarchy/hooks/{theme-set,post-boot}.d/cursor-accent.sh
-rm -rf ~/.local/share/icons/Omarchy-Accent ~/.local/state/cursor-accent
+rm -rf ~/.local/share/icons/Omarchy-Accent ~/.local/state/cursor-accent ~/.local/share/cursor-accent
 hyprctl setcursor default 24               # or your preferred size
 omarchy plugin remove io.github.smoothpixels.cursor-accent
 ```
@@ -113,7 +137,13 @@ NOTICE.md), pinned to a known-good commit rather than fetched at install
 time, so there's no network access at runtime. `recolor.py` patches a
 scratch copy of `config/render.json` with the current colors, symlinks the
 vendored `src/`/`svg/` into a scratch build directory (to avoid copying
-~1.5MB on every theme switch), and runs `cursor_utils.py --hypr` there.
+~1.5MB on every theme switch), and runs `src/build_theme.py` there. That
+builder reuses `cursor_utils.py`'s config loading, renders each image once,
+and writes both the hyprcursor and the Xcursor theme from it: SVG
+hyprcursor shapes on Hyprland 0.57+, PNGs on 0.56 (see the 1.2.0 changelog
+entry). `recolor.py` skips the build when the installed theme's stamp
+already matches, and swaps a rebuilt theme in atomically from
+`~/.local/share/cursor-accent/staging`.
 
 Validate before publishing:
 

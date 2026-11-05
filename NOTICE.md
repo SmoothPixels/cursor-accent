@@ -7,6 +7,9 @@ GPL-3.0-or-later. It builds hyprcursor and Xcursor themes from
 [ful1e5/Bibata_Cursor](https://github.com/ful1e5/Bibata_Cursor)'s SVG
 artwork, also GPL-3.0-or-later.
 
+`src/cursor_utils.py` is unmodified. `src/build_theme.py` imports its config
+loading and manifest classes and does its own rendering.
+
 Because that source is copyleft, this whole repository is GPL-3.0-or-later
 too (see LICENSE), unlike this author's other Omarchy plugins
 ([glyph-menu](https://github.com/SmoothPixels/glyph-menu),
@@ -14,5 +17,6 @@ too (see LICENSE), unlike this author's other Omarchy plugins
 are MIT since they don't depend on any GPL source.
 
 Everything else in this repository (`Service.qml`, `recolor.py`,
-`cursor-accent`, `hooks/`, `tools/`, `extensions/`) is original work written
-for this plugin.
+`src/build_theme.py`, `src/xcursor.py`, `cursor-accent`, `hooks/`, `tools/`,
+`extensions/`) is
+original work written for this plugin.
