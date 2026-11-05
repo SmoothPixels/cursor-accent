@@ -33,7 +33,7 @@ jobs:
           pacman -Syu --noconfirm --needed git jq python hyprcursor librsvg libxcursor cairo ${{ matrix.extra }}
           pacman -Q hyprcursor librsvg python
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Run tests
         run: |
