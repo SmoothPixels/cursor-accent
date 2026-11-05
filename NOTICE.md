@@ -17,6 +17,6 @@ too (see LICENSE), unlike this author's other Omarchy plugins
 are MIT since they don't depend on any GPL source.
 
 Everything else in this repository (`Service.qml`, `recolor.py`,
-`src/build_theme.py`, `src/xcursor.py`, `cursor-accent`, `hooks/`, `tools/`,
-`extensions/`) is
-original work written for this plugin.
+`src/build_theme.py`, `src/xcursor.py`, `cursor-accent`, `tools/`,
+`extensions/`, `tests/`, `.github/`) is original work written for this
+plugin.

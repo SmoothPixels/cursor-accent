@@ -1,5 +1,7 @@
 # Cursor Accent
 
+[![tests](https://github.com/SmoothPixels/cursor-accent/actions/workflows/tests.yml/badge.svg)](https://github.com/SmoothPixels/cursor-accent/actions/workflows/tests.yml)
+
 Recolors the system pointer to match the active Omarchy theme's accent
 color, automatically, every time you switch themes. No matugen, no new
 runtime dependencies: it uses librsvg (already installed, since

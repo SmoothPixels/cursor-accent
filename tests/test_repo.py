@@ -23,8 +23,11 @@ class Repo(unittest.TestCase):
 
     def test_changelog_has_an_entry_for_the_manifest_version(self):
         version = json.loads((REPO / "manifest.json").read_text())["version"]
-        top = re.search(r"^## (\S+)", (REPO / "CHANGELOG.md").read_text(), re.M).group(1)
-        self.assertEqual(top, version, "bump CHANGELOG.md and manifest.json together")
+        # An "Unreleased" section on top is fine; the newest release below it
+        # must match the manifest.
+        releases = [v for v in re.findall(r"^## (\S+)", (REPO / "CHANGELOG.md").read_text(), re.M)
+                    if v.lower() != "unreleased"]
+        self.assertEqual(releases[0], version, "bump CHANGELOG.md and manifest.json together")
 
     def test_python_compiles(self):
         with tempfile.TemporaryDirectory() as tmp:

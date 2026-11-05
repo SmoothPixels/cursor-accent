@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Added a test suite (`tests/`) and a `tests` workflow that runs it on every
+  push and pull request, and weekly against current Arch packages. It checks
+  the built theme the way Hyprland and XWayland read it, including the
+  startup state behind #3.
+
 ## 1.2.0 (2026-11-04)
 
 - Fixed Hyprland crashing at login on Omarchy 4.5 (abort in

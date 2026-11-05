@@ -28,10 +28,11 @@ _(leave blank)_
 **Maintainer notes**
 ```
 Recolors the system pointer to the active Omarchy theme's accent color,
-automatically on every `omarchy theme set`, by compiling a Bibata cursor
-through hyprcursor-util (already installed: hyprcursor is a hard Hyprland
-dependency). No matugen, no new runtime dependency beyond Python (already
-required, stdlib tomllib needs >=3.11).
+automatically on every `omarchy theme set`, by rendering a Bibata cursor
+into a hyprcursor + Xcursor theme with librsvg (already installed:
+hyprcursor depends on it). It renders through Omarchy's own python-gobject
+and python-cairo, or `rsvg-convert` when those are missing. No matugen, no
+new runtime dependency beyond Python (stdlib tomllib needs >=3.11).
 
 Ships as a `service`-kind plugin with no UI of its own; the actual
 recoloring is a pair of theme-set and post-boot hooks (documented Omarchy
