@@ -145,6 +145,23 @@ entry). `recolor.py` skips the build when the installed theme's stamp
 already matches, and swaps a rebuilt theme in atomically from
 `~/.local/share/cursor-accent/staging`.
 
+### Tests
+
+```sh
+python3 -m unittest discover -s tests -t . -v
+```
+
+They build the theme in a throwaway home, with `hyprctl`, `pacman` and
+`Hyprland` replaced by stand-ins, and read it back through libhyprcursor and
+libXcursor the way Hyprland and XWayland do: the state Omarchy 4.5's startup
+cursor leaves Hyprland 0.56 in (#3), every size Hyprland asks for, pixels
+against hyprcursor's own SVG raster, Xcursor names and aliases, the version
+guard, rebuild and skip decisions, the atomic swap, and both render paths.
+They need `hyprcursor`, `librsvg`, `libxcursor` and `jq`, plus
+`python-gobject` and `python-cairo` for the in-process renderer. The
+`tests` workflow runs them on every push and pull request, and weekly
+against current Arch packages.
+
 Validate before publishing:
 
 ```sh

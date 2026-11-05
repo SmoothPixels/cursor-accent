@@ -1,0 +1,41 @@
+name: tests
+
+# Builds the theme the way users' machines do and checks it the way Hyprland
+# and XWayland read it. The weekly run uses whatever Arch ships that day, so
+# upstream changes (hyprcursor, librsvg, Python) show up here before users
+# report them.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: tests (${{ matrix.renderer }})
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # What Omarchy users have: librsvg through python-gobject.
+          - renderer: in-process
+            extra: python-gobject python-cairo
+          # The fallback when those are missing: rsvg-convert per image.
+          - renderer: rsvg-convert
+            extra: ""
+    steps:
+      - name: Install packages
+        run: |
+          pacman -Syu --noconfirm --needed git jq python hyprcursor librsvg libxcursor cairo ${{ matrix.extra }}
+          pacman -Q hyprcursor librsvg python
+
+      - uses: actions/checkout@v4
+
+      - name: Run tests
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          python3 -m unittest discover -s tests -t . -v
